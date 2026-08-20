@@ -1,0 +1,75 @@
+{% extends 'store/base.html' %}
+{% block title %}Agri Gro — Fresh from the field{% endblock %}
+{% block content %}
+
+<section class="hero">
+  <div class="hero-inner">
+    <div>
+      <span class="hero-eyebrow">// Farm-to-cart marketplace</span>
+      <h1>Grow what <em>matters</em>,<br>sell what you grow.</h1>
+      <p class="lead">Agri Gro connects growers, tool-makers and grocers on one shelf — real seeds, real produce, real tools, priced fair.</p>
+      <div class="hero-ctas">
+        <a href="{% url 'product_list' %}" class="btn-primary">Browse the harvest →</a>
+        <a href="{% url 'about' %}" class="btn-outline">Our story</a>
+      </div>
+    </div>
+
+    <div class="hero-crate">
+      <div class="hero-crate-label">Today's pick</div>
+      {% if featured %}
+        {% with pick=featured.0 %}
+          <h3>{{ pick.name }}</h3>
+          <div class="price">₹{{ pick.price }}</div>
+        {% endwith %}
+      {% else %}
+        <h3>Add your first product</h3>
+        <div class="price">via admin</div>
+      {% endif %}
+      <div class="hero-stat-row">
+        <div class="hero-stat"><b>{{ featured|length }}</b><span>Fresh listings</span></div>
+        <div class="hero-stat"><b>{{ categories|length }}</b><span>Categories</span></div>
+        <div class="hero-stat"><b>24hr</b><span>Dispatch</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="section-inner">
+    <div class="section-head">
+      <div>
+        <span class="eyebrow">Shelves</span>
+        <h2>Shop by category</h2>
+      </div>
+    </div>
+    <div class="chip-row">
+      <a href="{% url 'product_list' %}" class="chip">All</a>
+      {% for cat in categories %}
+        <a href="{% url 'product_list' %}?category={{ cat.slug }}" class="chip">{{ cat.name }}</a>
+      {% endfor %}
+    </div>
+
+    <div class="section-head">
+      <div>
+        <span class="eyebrow">Just picked</span>
+        <h2>Featured products</h2>
+        <p>Newest additions to the Agri Gro shelf.</p>
+      </div>
+      <a href="{% url 'product_list' %}" class="btn-outline" style="color:var(--forest);border-color:var(--forest);">View all →</a>
+    </div>
+
+    {% if featured %}
+    <div class="product-grid">
+      {% for product in featured %}
+        {% include 'store/_product_card.html' with product=product %}
+      {% endfor %}
+    </div>
+    {% else %}
+      <div class="empty-state">
+        No products yet. Add some from the <a href="/admin/">admin panel</a> or run <code>populate.py</code>.
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+{% endblock %}

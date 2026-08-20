@@ -1,0 +1,20 @@
+{% extends 'store/base.html' %}
+{% block title %}Login — Agri Gro{% endblock %}
+{% block content %}
+<div class="auth-wrap">
+  <h1>Welcome back</h1>
+  <p class="sub">Login to your Agri Gro account to keep shopping.</p>
+  <form method="post">
+    {% csrf_token %}
+    <label class="field-label" for="id_username">Username</label>
+    {{ form.username }}
+    <label class="field-label" for="id_password">Password</label>
+    {{ form.password }}
+    {% if form.non_field_errors %}
+      <div class="field-errors">{{ form.non_field_errors }}</div>
+    {% endif %}
+    <button type="submit" class="auth-submit">Login</button>
+  </form>
+  <p class="auth-switch">New to Agri Gro? <a href="{% url 'register' %}">Create an account</a></p>
+</div>
+{% endblock %}

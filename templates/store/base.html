@@ -1,0 +1,96 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}Agri Gro{% endblock %}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a href="{% url 'home' %}" class="brand">
+      <span class="brand-mark">✦</span>
+      <span class="brand-name">Agri<em>Gro</em></span>
+    </a>
+
+    <nav class="main-nav">
+      <a href="{% url 'home' %}" class="nav-link"><span class="nav-tag">01</span>Home</a>
+      <a href="{% url 'about' %}" class="nav-link"><span class="nav-tag">02</span>About</a>
+      <a href="{% url 'product_list' %}" class="nav-link"><span class="nav-tag">03</span>Shop</a>
+    </nav>
+
+    <form class="nav-search" action="{% url 'product_list' %}" method="get">
+      <input type="text" name="q" placeholder="Search seeds, tools, produce…" value="{{ request.GET.q|default:'' }}">
+      <button type="submit" aria-label="Search">⌕</button>
+    </form>
+
+    <div class="nav-actions">
+      {% if user.is_authenticated %}
+        <a href="{% url 'cart' %}" class="cart-link">
+          Cart
+          {% with count=user.cart.total_items %}
+            <span class="cart-count">{{ count|default:0 }}</span>
+          {% endwith %}
+        </a>
+        <span class="hello-user">{{ user.username }}</span>
+        <form action="{% url 'logout' %}" method="post" style="display:inline;margin:0;">
+  {% csrf_token %}
+  <button type="submit" class="btn-ghost logout-btn">Logout</button>
+</form>
+      {% else %}
+        <a href="{% url 'login' %}" class="btn-ghost">Login</a>
+        <a href="{% url 'register' %}" class="btn-solid">Join</a>
+      {% endif %}
+    </div>
+  </div>
+</header>
+
+{% if messages %}
+<div class="messages-wrap">
+  {% for message in messages %}
+    <div class="msg msg-{{ message.tags }}">{{ message }}</div>
+  {% endfor %}
+</div>
+{% endif %}
+
+<main>
+  {% block content %}{% endblock %}
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <span class="brand-mark">✦</span> Agri<em>Gro</em>
+      <p>From the soil to your basket — a marketplace for growers and grocers.</p>
+    </div>
+    <div class="footer-grid">
+      <div>
+        <h4>Field Notes</h4>
+        <a href="{% url 'about' %}">About Agri Gro</a>
+        <a href="{% url 'product_list' %}">Browse the harvest</a>
+      </div>
+      <div>
+        <h4>Account</h4>
+        {% if user.is_authenticated %}
+          <a href="{% url 'cart' %}">Your cart</a>
+          <form action="{% url 'logout' %}" method="post" style="margin:0;">
+  {% csrf_token %}
+  <button type="submit" class="footer-logout-btn">Logout</button>
+</form>
+        {% else %}
+          <a href="{% url 'login' %}">Login</a>
+          <a href="{% url 'register' %}">Create account</a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">© {% now "Y" %} Agri Gro. Grown with Django.</div>
+</footer>
+
+</body>
+</html>

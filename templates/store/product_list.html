@@ -1,0 +1,37 @@
+{% extends 'store/base.html' %}
+{% block title %}Shop — Agri Gro{% endblock %}
+{% block content %}
+
+<section style="padding-top:44px;">
+  <div class="section-inner">
+    <div class="section-head">
+      <div>
+        <span class="eyebrow">The shelf</span>
+        <h2>{% if query %}Results for "{{ query }}"{% else %}All products{% endif %}</h2>
+        <p>{{ products|length }} item{{ products|length|pluralize }} found.</p>
+      </div>
+    </div>
+
+    <div class="chip-row">
+      <a href="{% url 'product_list' %}" class="chip {% if not selected_category %}active{% endif %}">All</a>
+      {% for cat in categories %}
+        <a href="?category={{ cat.slug }}{% if query %}&q={{ query }}{% endif %}"
+           class="chip {% if selected_category == cat.slug %}active{% endif %}">{{ cat.name }}</a>
+      {% endfor %}
+    </div>
+
+    {% if products %}
+      <div class="product-grid">
+        {% for product in products %}
+          {% include 'store/_product_card.html' with product=product %}
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="empty-state">
+        Nothing matched your search. Try a different term or <a href="{% url 'product_list' %}">clear filters</a>.
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+{% endblock %}

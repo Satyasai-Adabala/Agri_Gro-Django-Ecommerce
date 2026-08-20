@@ -1,0 +1,49 @@
+{% extends 'store/base.html' %}
+{% block title %}{{ product.name }} — Agri Gro{% endblock %}
+{% block content %}
+
+<div class="detail-wrap">
+  <div class="detail-thumb">
+    {% if product.image %}
+      <img src="{{ product.image.url }}" alt="{{ product.name }}">
+    {% else %}
+      <span style="font-family:var(--font-display);color:var(--brown);">{{ product.name }}</span>
+    {% endif %}
+  </div>
+  <div class="detail-info">
+    <span class="detail-cat">{{ product.category.name }}</span>
+    <h1>{{ product.name }}</h1>
+    <div class="detail-price">₹{{ product.price }}</div>
+    <p class="detail-desc">{{ product.description|default:"Fresh from Agri Gro's partner farms, packed and dispatched within 24 hours." }}</p>
+
+    {% if product.stock > 0 %}
+      <p style="color:var(--text-dim);font-size:.85rem;">In stock: {{ product.stock }}</p>
+    {% else %}
+      <p class="stock-low">Out of stock</p>
+    {% endif %}
+
+    {% if user.is_authenticated %}
+      <form action="{% url 'add_to_cart' product.pk %}" method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn-primary" style="border:none;cursor:pointer;">Add to cart</button>
+      </form>
+    {% else %}
+      <a href="{% url 'login' %}" class="btn-primary">Login to add to cart</a>
+    {% endif %}
+  </div>
+</div>
+
+{% if related %}
+<section>
+  <div class="section-inner">
+    <h3 class="related-heading">More from {{ product.category.name }}</h3>
+    <div class="product-grid">
+      {% for p in related %}
+        {% include 'store/_product_card.html' with product=p %}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends 'store/base.html' %}
+{% block title %}Create account — Agri Gro{% endblock %}
+{% block content %}
+<div class="auth-wrap">
+  <h1>Join Agri Gro</h1>
+  <p class="sub">Create an account to start adding products to your cart.</p>
+  <form method="post">
+    {% csrf_token %}
+    <label class="field-label" for="id_username">Username</label>
+    {{ form.username }}
+    {{ form.username.errors }}
+    <label class="field-label" for="id_email">Email</label>
+    {{ form.email }}
+    {{ form.email.errors }}
+    <label class="field-label" for="id_password1">Password</label>
+    {{ form.password1 }}
+    {{ form.password1.errors }}
+    <label class="field-label" for="id_password2">Confirm password</label>
+    {{ form.password2 }}
+    {{ form.password2.errors }}
+    <button type="submit" class="auth-submit">Create account</button>
+  </form>
+  <p class="auth-switch">Already have an account? <a href="{% url 'login' %}">Login</a></p>
+</div>
+{% endblock %}

@@ -1,0 +1,28 @@
+<div class="product-card">
+  <a href="{% url 'product_detail' product.pk %}" class="product-thumb">
+    {% if product.image %}
+      <img src="{{ product.image.url }}" alt="{{ product.name }}">
+    {% else %}
+      {{ product.name }}
+    {% endif %}
+    <span class="product-cat-tag">{{ product.category.name }}</span>
+  </a>
+  <div class="product-body">
+    <h3><a href="{% url 'product_detail' product.pk %}">{{ product.name }}</a></h3>
+    <p class="desc">{{ product.description|default:"Fresh from Agri Gro's partner farms." }}</p>
+    <div class="product-foot">
+      <span class="price-tag">₹{{ product.price }}</span>
+      {% if user.is_authenticated %}
+        <form action="{% url 'add_to_cart' product.pk %}" method="post" style="margin:0;">
+          {% csrf_token %}
+          <button type="submit" class="btn-add">+ Cart</button>
+        </form>
+      {% else %}
+        <a href="{% url 'login' %}" class="btn-add">+ Cart</a>
+      {% endif %}
+    </div>
+    {% if product.stock <= 5 %}
+      <span class="stock-low">Only {{ product.stock }} left</span>
+    {% endif %}
+  </div>
+</div>
