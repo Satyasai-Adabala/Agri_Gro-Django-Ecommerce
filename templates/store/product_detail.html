@@ -4,8 +4,8 @@
 
 <div class="detail-wrap">
   <div class="detail-thumb">
-    {% if product.image %}
-      <img src="{{ product.image.url }}" alt="{{ product.name }}">
+    {% if product.display_image %}
+      <img src="{{ product.display_image }}" alt="{{ product.name }}">
     {% else %}
       <span style="font-family:var(--font-display);color:var(--brown);">{{ product.name }}</span>
     {% endif %}
